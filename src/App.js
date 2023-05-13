@@ -1,6 +1,12 @@
 import React from 'react';
 import { useState } from 'react';
 
+/**
+ * Represents a single square on the Tic-Tac-Toe board.
+ * @param value The value of the square ('X', 'O', or null).
+ * @param onSquareClick The callback function to handle the square click.
+ * @returns {JSX.Element} The square element.
+ */
 function Square({ value, onSquareClick }) {
     return (
         <button className="square" onClick={onSquareClick}>
@@ -9,7 +15,19 @@ function Square({ value, onSquareClick }) {
     );
 }
 
+/**
+ * Represents the Tic-Tac-Toe board.
+ * @param xIsNext A boolean indicating whether it's X's turn.
+ * @param squares An array representing the current state of the board.
+ * @param onPlay The callback function to handle the player's move.
+ * @returns {JSX.Element} The board element.
+ */
 function Board({ xIsNext, squares, onPlay }) {
+
+    /**
+     * Handles a square click event.
+     * @param {number} i The index of the clicked square.
+     */
     function handleClick(i) {
         if (calculateWinner(squares) || squares[i]) {
             return;
@@ -53,18 +71,33 @@ function Board({ xIsNext, squares, onPlay }) {
     );
 }
 
+/**
+ * Represents the Tic-Tac-Toe game.
+ * @returns {JSX.Element} The game element.
+ */
 export default function Game() {
     const [history, setHistory] = useState([Array(9).fill(null)]);
     const [currentMove, setCurrentMove] = useState(0);
     const xIsNext = currentMove % 2 === 0;
     const currentSquares = history[currentMove];
 
+    /**
+     * Handles a move by updating the game history with the new state and
+     * changing the current move to the last added move.
+     * @param {Array} nextSquares The updated state of the game board.
+     * @returns {void}
+     */
     function handlePlay(nextSquares) {
         const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
         setHistory(nextHistory);
         setCurrentMove(nextHistory.length - 1);
     }
 
+    /**
+     * Sets the current move to the specified move index in the game history.
+     * @param {number} nextMove The move index to jump to.
+     * @returns {void}
+     */
     function jumpTo(nextMove) {
         setCurrentMove(nextMove);
     }
@@ -95,6 +128,11 @@ export default function Game() {
     );
 }
 
+/**
+ * Calculates the winner of a Tic-Tac-Toe game.
+ * @param {Array} squares An array representing the state of the game board.
+ * @return {(string|null)} Returns the symbol (X or O) of the winner or null if there is no winner.
+ */
 function calculateWinner(squares) {
     const lines = [
         [0, 1, 2],
